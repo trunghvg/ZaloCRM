@@ -1,0 +1,13 @@
+[build]
+dockerfile = "docker/Dockerfile"
+dockerfilePath = "docker/Dockerfile"
+
+[deploy]
+startCommand = "sh -c 'npx prisma db push --accept-data-loss --url \"$DATABASE_URL\" && node dist/app.js'"
+healthcheckPath = "/health"
+healthcheckTimeout = 60
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[[services]]
+name = "app"
