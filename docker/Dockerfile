@@ -24,7 +24,6 @@ WORKDIR /app
 COPY --from=backend-builder /app/backend/dist       /app/dist
 COPY --from=backend-builder /app/backend/node_modules /app/node_modules
 COPY --from=backend-builder /app/backend/prisma     /app/prisma
-COPY --from=backend-builder /app/backend/prisma.config.ts /app/prisma.config.ts
 COPY --from=backend-builder /app/backend/package.json /app/package.json
 COPY --from=frontend-builder /app/frontend/dist     /app/static
 
@@ -33,4 +32,4 @@ RUN mkdir -p /var/lib/zalo-crm/files
 EXPOSE 3000
 ENTRYPOINT ["/sbin/tini", "--"]
 # Push schema to DB then start server
-CMD ["sh", "-c", "npx prisma db push --accept-data-loss --url \"$DATABASE_URL\" && node dist/app.js"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss --schema /app/prisma/schema.prisma --url \"$DATABASE_URL\" && node dist/app.js"]
